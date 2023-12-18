@@ -1,0 +1,197 @@
+
+<html>
+
+<head>
+  <title>Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="calculator">
+    <input type="text" class="display" id="display">
+    <div class="buttons">
+      <button class="operator" id="clear">C</button>
+      <button class="operator" id="backspace">CE</button>
+      <button class="operator" id="percent">%</button>
+      <button class="operator" id="divide">/</button>
+      <button class="number" id="seven">7</button>
+      <button class="number" id="eight">8</button>
+      <button class="number" id="nine">9</button>
+      <button class="operator" id="multiply">*</button>
+      <button class="number" id="four">4</button>
+      <button class="number" id="five">5</button>
+      <button class="number" id="six">6</button>
+      <button class="operator" id="subtract">-</button>
+      <button class="number" id="one">1</button>
+      <button class="number" id="two">2</button>
+      <button class="number" id="three">3</button>
+      <button class="operator" id="add">+</button>
+      <button class="number" id="zero">0</button>
+      <button class="number" id="decimal">.</button>
+      <button class="operator" id="equals">=</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+.calculator {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.calculator button {
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.calculator button:hover {
+  background-color: #eee;
+}
+
+.calculator button.operator {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.calculator button.operator:hover {
+  background-color: #d32f2f;
+}
+
+.calculator button.equal {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.calculator button.equal:hover {
+  background-color: #388e3c;
+}
+
+.calculator input {
+  grid-column: span 4;
+  height: 50px;
+  padding: 5px;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  font-size: 24px;
+  text-align: right;
+}</style>
+<script>
+
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('button');
+
+let firstOperand = null;
+let secondOperand = null;
+let operator = null;
+
+function add(a, b) {
+  return a + b;
+}
+
+function subtract(a, b) {
+  return a - b;
+}
+
+function multiply(a, b) {
+  return a * b;
+}
+
+function divide(a, b) {
+  return a / b;
+}
+
+function operate(operator, a, b) {
+  switch (operator) {
+    case '+':
+      return add(a, b);
+    case '-':
+      return subtract(a, b);
+    case '*':
+      return multiply(a, b);
+    case '/':
+      return divide(a, b);
+    default:
+      return null;
+  }
+}
+
+function calculate() {
+  if (firstOperand === null || secondOperand === null || operator === null) {
+    return;
+  }
+
+  const result = operate(operator, firstOperand, secondOperand);
+
+  display.value = result;
+
+  firstOperand = null;
+  secondOperand = null;
+  operator = null;
+}
+
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const value = button.innerHTML;
+
+    if (value === 'C') {
+      display.value = '';
+      firstOperand = null;
+      secondOperand = null;
+      operator = null;
+      return;
+    }
+
+    if (value === 'CE') {
+      display.value = display.value.slice(0, -1);
+      return;
+    }
+
+    if (value === '.') {
+      if (display.value.includes('.')) {
+        return;
+      }
+
+      display.value += '.';
+      return;
+    }
+
+    if (value === '=') {
+      calculate();
+      return;
+    }
+
+    if (['+', '-', '*', '/'].includes(value)) {
+      operator = value;
+      firstOperand = parseFloat(display.value);
+      display.value = '';
+      return;
+    }
+
+    display.value += value;
+  });
+});
+</script>
+
